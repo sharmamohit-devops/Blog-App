@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nebula | Vibrant Dark Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Add Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <link rel="stylesheet" href="index.css">
+   
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-blog"></i> Nebula
+            </a>
+            <div class="auth-container">
+                <span id="userProfile" class="user-profile" style="display: none;">
+                    <i class="fas fa-user"></i> <span id="userName"></span>
+                </span>
+                <span id="adminLink" style="display: none;">
+                    <a href="#admin" class="user-profile">
+                        <i class="fas fa-lock"></i> Admin
+                    </a>
+                </span>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation" aria-expanded="false">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-times"></i>
+            </button>
+            <nav id="mainNav">
+                <div class="nav-header">
+                    <span class="nav-logo">
+                        <i class="fas fa-blog"></i> Nebula
+                    </span>
+                    <button class="close-nav-btn" id="closeNavBtn" aria-label="Close navigation">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <ul>
+                    <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#create"><i class="fas fa-pen"></i> Create Blog</a></li>
+                    <li><a href="#blogs"><i class="fas fa-book-open"></i> Blogs</a></li>
+                    <li><a href="#about"><i class="fas fa-info-circle"></i> About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <h1>Share Your Thoughts With The World</h1>
+            <p>Nebula is a vibrant blogging platform where you can express your ideas, share your knowledge, and connect with like-minded people. Join our community today.</p>
+            <div class="hero-buttons">
+                <button id="authButton" class="auth-button">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+                <a href="#create" class="cta-button">Start Writing</a>
+            </div>
+        </section>
+
+        <section id="create">
+            <div class="blog-form-container" id="blogFormContainer">
+                <form id="blogForm" class="blog-form">
+                    <h2><i class="fas fa-pen"></i> Create New Blog</h2>
+                    <div class="form-group">
+                        <label for="blogTitle">Blog Title</label>
+                        <input type="text" id="blogTitle" placeholder="Enter your blog title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="blogImage">Image URL (optional)</label>
+                        <input type="url" id="blogImage" placeholder="https://example.com/image.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label for="blogContent">Blog Content</label>
+                        <textarea id="blogContent" placeholder="Write your blog content here..." required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i> Publish Blog
+                    </button>
+                </form>
+            </div>
+            <a href="#create" class="write-blog-btn" id="writeBlogBtn" style="display: none;">
+                <i class="fas fa-pen-nib"></i> Write a Blog
+            </a>
+        </section>
+
+        <section class="blog-posts" id="blogs">
+            <h2><i class="fas fa-book-open"></i> Top Indian Blogs</h2>
+            <div class="posts-grid" id="postsGrid"></div>
+        </section>
+
+        <!-- Admin Panel Section (hidden by default) -->
+        <section id="admin" style="display: none;">
+            <div class="blog-form-container">
+                <h2><i class="fas fa-lock"></i> Admin Panel</h2>
+                <h3>Pending Blog Approvals</h3>
+                <div class="posts-grid" id="pendingPostsGrid"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="about">
+        <div class="footer-content">
+            <a href="#" class="footer-logo">Nebula</a>
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#create">Create Blog</a>
+                <a href="#blogs">Blogs</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="social-links">
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+            <p class="copyright">© 2025 Nebula Blog. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div class="auth-modal" id="loginModal">
+        <div class="auth-modal-content">
+            <div class="auth-modal-header">
+                <h3 class="auth-modal-title">Login to Nebula</h3>
+                <button class="close-auth-modal" id="closeLoginModal">×</button>
+            </div>
+            <div class="auth-modal-body">
+                <form id="loginForm" class="auth-form">
+                    <div class="auth-form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" placeholder="Enter your email" required aria-describedby="emailError">
+                        <span class="error-message" id="emailError"></span>
+                    </div>
+                    <div class="auth-form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required aria-describedby="passwordError">
+                        <button type="button" class="password-toggle" id="togglePassword" aria-label="Toggle password visibility">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <span class="error-message" id="passwordError"></span>
+                    </div>
+                    <div class="remember-me">
+                        <input type="checkbox" id="rememberMe" checked>
+                        <label for="rememberMe">Remember Me</label>
+                    </div>
+                    <button type="submit" class="auth-btn">Login</button>
+                </form>
+                <div class="auth-toggle">
+                    Don't have an account? <a href="#" id="showRegister">Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auth-modal" id="registerModal">
+        <div class="auth-modal-content">
+            <div class="auth-modal-header">
+                <h3 class="auth-modal-title">Register for Nebula</h3>
+                <button class="close-auth-modal" id="closeRegisterModal">×</button>
+            </div>
+            <div class="auth-modal-body">
+                <form id="registerForm" class="auth-form">
+                    <div class="auth-form-group">
+                        <label for="registerUsername">Username</label>
+                        <input type="text" id="registerUsername" placeholder="Enter your username" required>
+                    </div>
+                    <div class="auth-form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" placeholder="Enter your email" required>
+                    </div>
+                    <div class="auth-form-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="auth-btn">Register</button>
+                </form>
+                <div class="auth-toggle">
+                    Already have an account? <a href="#" id="showLogin">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="blogModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle"></h3>
+                <button class="close-modal" id="closeModal">×</button>
+            </div>
+            <div class="modal-body">
+                <img src="" alt="Blog Image" class="modal-image" id="modalImage">
+                <p class="modal-author">
+                    <i class="fas fa-user"></i>
+                    <span id="modalAuthor"></span>
+                </p>
+                <div class="modal-text" id="modalText"></div>
+                <a href="#" id="modalLink" target="_blank" class="read-more">Visit Blog <i class="fas fa-external-link-alt"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="approvalModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Blog Approval</h3>
+                <button class="close-modal" id="closeApprovalModal">×</button>
+            </div>
+            <div class="modal-body">
+                <img src="" alt="Blog Image" class="modal-image" id="approvalImage">
+                <p class="modal-author">
+                    <i class="fas fa-user"></i>
+                    <span id="approvalAuthor"></span>
+                </p>
+                <div class="modal-text" id="approvalText"></div>
+                <div class="approval-buttons" style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
+                    <button id="approveBlog" class="auth-button" style="background: linear-gradient(135deg, var(--success-color), var(--secondary));">
+                        <i class="fas fa-check"></i> Approve
+                    </button>
+                    <button id="rejectBlog" class="auth-button" style="background: linear-gradient(135deg, var(--error-color), #f97316);">
+                        <i class="fas fa-times"></i> Reject
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="scroll-to-top" id="scrollToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
+    <script src="index.js"></script>
+     <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
+</body>
+</html>
