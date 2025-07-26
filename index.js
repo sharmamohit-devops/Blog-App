@@ -910,4 +910,73 @@ function animateOnScroll() {
         }
     });
 }
+    // Add these to your existing JavaScript code
+
+    // Privacy Policy Modal
+    const privacyModal = document.getElementById('privacyModal');
+    const closePrivacyModal = document.getElementById('closePrivacyModal');
+    const privacyLink = document.querySelector('a[href="#privacy"]');
+
+    // Terms of Service Modal
+    const termsModal = document.getElementById('termsModal');
+    const closeTermsModal = document.getElementById('closeTermsModal');
+    const termsLink = document.querySelector('a[href="#terms"]');
+
+    // Contact Modal
+    const contactModal = document.getElementById('contactModal');
+    const closeContactModal = document.getElementById('closeContactModal');
+    const contactLink = document.querySelector('a[href="#contact"]');
+
+    // Privacy Policy click handler
+    privacyLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        privacyModal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    });
+
+    // Terms of Service click handler
+    termsLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        termsModal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    });
+
+    // Contact click handler
+    contactLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        contactModal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    });
+
+    // Close modals
+    closePrivacyModal.addEventListener('click', function () {
+        privacyModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+
+    closeTermsModal.addEventListener('click', function () {
+        termsModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+
+    closeContactModal.addEventListener('click', function () {
+        contactModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+
+    // Close when clicking outside modal content
+    window.addEventListener('click', function (e) {
+        if (e.target === privacyModal) {
+            privacyModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        if (e.target === termsModal) {
+            termsModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        if (e.target === contactModal) {
+            contactModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
 
