@@ -1,17 +1,18 @@
-<!DOCTYPE html>
+<section id="about" class="reveal" style="margin-bottom:2rem;"></section>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nebula | Vibrant Dark Blog</title>
+    <title>Nebula | Sleek Dark Blog</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Add Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
     <link rel="stylesheet" href="index.css">
-   
 </head>
+
 <body>
     <header>
         <div class="header-container">
@@ -54,7 +55,8 @@
     <main>
         <section class="hero" id="home">
             <h1>Share Your Thoughts With The World</h1>
-            <p>Nebula is a vibrant blogging platform where you can express your ideas, share your knowledge, and connect with like-minded people. Join our community today.</p>
+            <p>Nebula is a vibrant blogging platform where you can express your ideas, share your knowledge, and connect
+                with like-minded people. Join our community today.</p>
             <div class="hero-buttons">
                 <button id="authButton" class="auth-button">
                     <i class="fas fa-sign-in-alt"></i> Sign In
@@ -111,16 +113,16 @@
                 <a href="#home">Home</a>
                 <a href="#create">Create Blog</a>
                 <a href="#blogs">Blogs</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Contact</a>
+                <a href="#privacy">Privacy Policy</a>
+                <a href="#terms">Terms of Service</a>
+                <a href="#contact">Contact</a>
             </div>
             <div class="social-links">
-                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://www.instagram.com/mohitsharma_dev7/" aria-label="Instagram"><i
+                        class="fab fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/mohit-sharma-8a113630b/" aria-label="LinkedIn"><i
+                        class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/sharmamohit-devops" aria-label="GitHub"><i class="fab fa-github"></i></a>
             </div>
             <p class="copyright">© 2025 Nebula Blog. All rights reserved.</p>
         </div>
@@ -136,13 +138,16 @@
                 <form id="loginForm" class="auth-form">
                     <div class="auth-form-group">
                         <label for="loginEmail">Email</label>
-                        <input type="email" id="loginEmail" placeholder="Enter your email" required aria-describedby="emailError">
+                        <input type="email" id="loginEmail" placeholder="Enter your email" required
+                            aria-describedby="emailError">
                         <span class="error-message" id="emailError"></span>
                     </div>
                     <div class="auth-form-group">
                         <label for="loginPassword">Password</label>
-                        <input type="password" id="loginPassword" placeholder="Enter your password" required aria-describedby="passwordError">
-                        <button type="button" class="password-toggle" id="togglePassword" aria-label="Toggle password visibility">
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required
+                            aria-describedby="passwordError">
+                        <button type="button" class="password-toggle" id="togglePassword"
+                            aria-label="Toggle password visibility">
                             <i class="fas fa-eye"></i>
                         </button>
                         <span class="error-message" id="passwordError"></span>
@@ -179,6 +184,10 @@
                     <div class="auth-form-group">
                         <label for="registerPassword">Password</label>
                         <input type="password" id="registerPassword" placeholder="Enter your password" required>
+                        <button type="button" class="password-toggle" id="toggleRegisterPassword"
+                            aria-label="Toggle password visibility">
+                            <i class="fas fa-eye"></i>
+                        </button>
                     </div>
                     <button type="submit" class="auth-btn">Register</button>
                 </form>
@@ -202,7 +211,8 @@
                     <span id="modalAuthor"></span>
                 </p>
                 <div class="modal-text" id="modalText"></div>
-                <a href="#" id="modalLink" target="_blank" class="read-more">Visit Blog <i class="fas fa-external-link-alt"></i></a>
+                <a href="#" id="modalLink" target="_blank" class="read-more">Visit Blog <i
+                        class="fas fa-external-link-alt"></i></a>
             </div>
         </div>
     </div>
@@ -220,11 +230,14 @@
                     <span id="approvalAuthor"></span>
                 </p>
                 <div class="modal-text" id="approvalText"></div>
-                <div class="approval-buttons" style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
-                    <button id="approveBlog" class="auth-button" style="background: linear-gradient(135deg, var(--success-color), var(--secondary));">
+                <div class="approval-buttons"
+                    style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
+                    <button id="approveBlog" class="auth-button"
+                        style="background: linear-gradient(135deg, var(--success-color), var(--secondary));">
                         <i class="fas fa-check"></i> Approve
                     </button>
-                    <button id="rejectBlog" class="auth-button" style="background: linear-gradient(135deg, var(--error-color), #f97316);">
+                    <button id="rejectBlog" class="auth-button"
+                        style="background: linear-gradient(135deg, var(--error-color), #f97316);">
                         <i class="fas fa-times"></i> Reject
                     </button>
                 </div>
@@ -240,7 +253,225 @@
         <i class="fas fa-check-circle"></i>
         <span id="toastMessage"></span>
     </div>
-    <script src="index.js"></script>
-     <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
 </body>
+<!-- Add these modal sections right before the closing </body> tag -->
+<div class="modal" id="privacyModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Privacy Policy</h3>
+            <button class="close-modal" id="closePrivacyModal">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-text">
+                <h4>1. Information We Collect</h4>
+                <p>When you use Nebula Blog, we may collect personal information such as your name, email address, and
+                    any content you submit. We also automatically collect certain data like IP addresses, browser type,
+                    and usage patterns.</p>
+
+                <h4>2. How We Use Your Information</h4>
+                <p>We use the information we collect to:</p>
+                <ul>
+                    <li>Provide and maintain our service</li>
+                    <li>Improve and personalize your experience</li>
+                    <li>Communicate with you about your account</li>
+                    <li>Monitor and analyze usage patterns</li>
+                    <li>Detect and prevent security issues</li>
+                </ul>
+
+                <h4>3. Data Security</h4>
+                <p>We implement appropriate security measures to protect your personal information. However, no method
+                    of transmission over the Internet is 100% secure, and we cannot guarantee absolute security.</p>
+
+                <h4>4. Third-Party Services</h4>
+                <p>We use Firebase for authentication and data storage. Firebase's privacy policy applies to their
+                    collection and use of your information.</p>
+
+                <h4>5. Cookies</h4>
+                <p>We use cookies to maintain your session and remember your preferences. You can disable cookies in
+                    your browser settings, but this may affect functionality.</p>
+
+                <h4>6. Changes to This Policy</h4>
+                <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the
+                    new policy on this page.</p>
+
+                <h4>7. Contact Us</h4>
+                <p>If you have questions about this Privacy Policy, please contact us at privacy@nebulablog.example.com.
+                </p>
+
+                <p><strong>Last Updated:</strong> July 26, 2025</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="termsModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Terms of Service</h3>
+            <button class="close-modal" id="closeTermsModal">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-text">
+                <h4>1. Acceptance of Terms</h4>
+                <p>By accessing or using Nebula Blog, you agree to be bound by these Terms of Service. If you disagree
+                    with any part, you may not access the service.</p>
+
+                <h4>2. User Responsibilities</h4>
+                <p>You agree to:</p>
+                <ul>
+                    <li>Provide accurate information when registering</li>
+                    <li>Maintain the security of your account</li>
+                    <li>Not post illegal, harmful, or offensive content</li>
+                    <li>Not impersonate others or misrepresent affiliations</li>
+                    <li>Not engage in any activity that disrupts the service</li>
+                </ul>
+
+                <h4>3. Content Ownership</h4>
+                <p>You retain ownership of any content you submit, but you grant us a worldwide, non-exclusive license
+                    to display, distribute, and modify your content for the purpose of operating the service.</p>
+
+                <h4>4. Prohibited Content</h4>
+                <p>You may not post content that:</p>
+                <ul>
+                    <li>Is illegal, harmful, or threatening</li>
+                    <li>Violates intellectual property rights</li>
+                    <li>Contains viruses or malicious code</li>
+                    <li>Is spam or unauthorized advertising</li>
+                    <li>Is pornographic or sexually explicit</li>
+                </ul>
+
+                <h4>5. Termination</h4>
+                <p>We may terminate or suspend your account immediately, without notice, for any violation of these
+                    terms.</p>
+
+                <h4>6. Disclaimer</h4>
+                <p>The service is provided "as is" without warranties of any kind. We are not responsible for any
+                    damages resulting from your use of the service.</p>
+
+                <h4>7. Changes to Terms</h4>
+                <p>We reserve the right to modify these terms at any time. Your continued use constitutes acceptance of
+                    the revised terms.</p>
+
+                <h4>8. Governing Law</h4>
+                <p>These terms shall be governed by the laws of India, without regard to its conflict of law provisions.
+                </p>
+
+                <p><strong>Last Updated:</strong> July 26, 2025</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="contactModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Contact Us</h3>
+            <button class="close-modal" id="closeContactModal">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-text">
+                <h4>Get in Touch</h4>
+                <p>We'd love to hear from you! Here's how you can reach us:</p>
+
+                <div style="margin: 1.5rem 0;">
+                    <p><i class="fas fa-envelope" style="color: var(--primary-light); margin-right: 0.5rem;"></i> Email:
+                        contact@nebulablog.example.com</p>
+                    <p><i class="fas fa-phone" style="color: var(--primary-light); margin-right: 0.5rem;"></i> Phone:
+                        +91 9999999999</p>
+                    <p><i class="fas fa-map-marker-alt" style="color: var(--primary-light); margin-right: 0.5rem;"></i>
+                        Address: 123 Tech Park, Bangalore, India - 560001</p>
+                </div>
+
+                <h4>Follow Us</h4>
+                <div class="social-links" style="justify-content: flex-start; margin: 1rem 0;">
+                    <a href="https://www.instagram.com/mohitsharma_dev7/" aria-label="Instagram"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/mohit-sharma-8a113630b/" aria-label="LinkedIn"><i
+                            class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/sharmamohit-devops" aria-label="GitHub"><i
+                            class="fab fa-github"></i></a>
+                </div>
+
+                <h4>Business Hours</h4>
+                <p>Monday - Friday: 9:00 AM - 6:00 PM IST<br>
+                    Saturday: 10:00 AM - 4:00 PM IST<br>
+                    Sunday: Closed</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="index.js"></script>
+<script>
+    // Add these to your existing JavaScript code
+
+    // Privacy Policy Modal
+    const privacyModal = document.getElementById('privacyModal');
+    const closePrivacyModal = document.getElementById('closePrivacyModal');
+    const privacyLink = document.querySelector('a[href="#privacy"]');
+
+    // Terms of Service Modal
+    const termsModal = document.getElementById('termsModal');
+    const closeTermsModal = document.getElementById('closeTermsModal');
+    const termsLink = document.querySelector('a[href="#terms"]');
+
+    // Contact Modal
+    const contactModal = document.getElementById('contactModal');
+    const closeContactModal = document.getElementById('closeContactModal');
+    const contactLink = document.querySelector('a[href="#contact"]');
+
+    // Privacy Policy click handler
+    privacyLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        privacyModal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    });
+
+    // Terms of Service click handler
+    termsLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        termsModal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    });
+
+    // Contact click handler
+    contactLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        contactModal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    });
+
+    // Close modals
+    closePrivacyModal.addEventListener('click', function () {
+        privacyModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+
+    closeTermsModal.addEventListener('click', function () {
+        termsModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+
+    closeContactModal.addEventListener('click', function () {
+        contactModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+
+    // Close when clicking outside modal content
+    window.addEventListener('click', function (e) {
+        if (e.target === privacyModal) {
+            privacyModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        if (e.target === termsModal) {
+            termsModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        if (e.target === contactModal) {
+            contactModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+</script>
+<script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
+
 </html>
