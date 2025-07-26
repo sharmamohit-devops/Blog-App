@@ -1,12 +1,12 @@
 // Firebase configuration - Replace with your actual config
 const firebaseConfig = {
-  apiKey: "AIzaSyCX9UYMLfhVgABq9Jr_7mfmxPGJ8IDUs4A",
-  authDomain: "blog-app-3d4b6.firebaseapp.com",
-  projectId: "blog-app-3d4b6",
-  storageBucket: "blog-app-3d4b6.firebasestorage.app",
-  messagingSenderId: "333584432477",
-  appId: "1:333584432477:web:f950a75932835568be3cb4",
-  measurementId: "G-56NY6VLYQ8"
+    apiKey: "AIzaSyCX9UYMLfhVgABq9Jr_7mfmxPGJ8IDUs4A",
+    authDomain: "blog-app-3d4b6.firebaseapp.com",
+    projectId: "blog-app-3d4b6",
+    storageBucket: "blog-app-3d4b6.firebasestorage.app",
+    messagingSenderId: "333584432477",
+    appId: "1:333584432477:web:f950a75932835568be3cb4",
+    measurementId: "G-56NY6VLYQ8"
 };
 
 // Initialize Firebase
@@ -36,7 +36,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const showRegister = document.getElementById('showRegister');
     const showLogin = document.getElementById('showLogin');
     const togglePassword = document.getElementById('togglePassword');
+    const toggleRegisterPassword = document.getElementById('toggleRegisterPassword');
     const loginPassword = document.getElementById('loginPassword');
+    const registerPassword = document.getElementById('registerPassword');
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toastMessage');
     const adminSection = document.getElementById('admin');
@@ -182,11 +184,19 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    function togglePasswordVisibility(inputElement, toggleButton) {
+        const type = inputElement.type === 'password' ? 'text' : 'password';
+        inputElement.type = type;
+        toggleButton.querySelector('i').classList.toggle('fa-eye');
+        toggleButton.querySelector('i').classList.toggle('fa-eye-slash');
+    }
+
     togglePassword.addEventListener('click', function () {
-        const type = loginPassword.type === 'password' ? 'text' : 'password';
-        loginPassword.type = type;
-        this.querySelector('i').classList.toggle('fa-eye');
-        this.querySelector('i').classList.toggle('fa-eye-slash');
+        togglePasswordVisibility(loginPassword, togglePassword);
+    });
+
+    toggleRegisterPassword.addEventListener('click', function () {
+        togglePasswordVisibility(registerPassword, toggleRegisterPassword);
     });
 
     // Firebase Auth State Listener
@@ -307,16 +317,6 @@ document.addEventListener('DOMContentLoaded', function () {
             status: "approved"
         },
         {
-            id: "default2",
-            title: "Analytics India Magazine",
-            author: "Bhasker Gupta & Team",
-            image: "https://images.unsplash.com/photo-1551288049-b1f3c6fded6f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-            content: "Analytics India Magazine, founded by Bhasker Gupta, provides in-depth articles, tutorials, and news on AI, machine learning, and data science. It covers neural networks, NLP, and AI applications, making it a key resource for Indian data scientists.",
-            date: "Ongoing",
-            url: "https://analyticsindiamag.com/",
-            status: "approved"
-        },
-        {
             id: "default3",
             title: "IndianAI.in",
             author: "Sarvam AI Team",
@@ -344,6 +344,56 @@ document.addEventListener('DOMContentLoaded', function () {
             content: "YourStory, founded by Shradha Sharma, features tech stories and tutorials on web development, AI, and ML in its tech section. It highlights Indian startups and developers, blending practical tips with inspirational narratives.",
             date: "Ongoing",
             url: "https://yourstory.com/topic/technology",
+            status: "approved"
+        },
+        {
+            id: "default6",
+            title: "GeeksforGeeks",
+            author: "GeeksforGeeks Editorial",
+            image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1470&q=80",
+            content: "GeeksforGeeks is a professional platform for computer science enthusiasts, offering tutorials, coding challenges, interview preparation, and articles on algorithms, data structures, and trending technologies.",
+            date: "Ongoing",
+            url: "https://www.geeksforgeeks.org/",
+            status: "approved"
+        },
+        {
+            id: "default7",
+            title: "TechCrunch India",
+            author: "TechCrunch Editorial",
+            image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1470&q=80",
+            content: "TechCrunch India covers the latest technology news, startup stories, product launches, and industry analysis. It is a trusted source for professionals seeking updates on the Indian and global tech ecosystem.",
+            date: "Ongoing",
+            url: "https://techcrunch.com/tag/india/",
+            status: "approved"
+        },
+        {
+            id: "default8",
+            title: "Microsoft Developer Blog",
+            author: "Microsoft India Team",
+            image: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1470&q=80",
+            content: "The Microsoft Developer Blog shares professional insights, tutorials, and announcements on cloud computing, AI, .NET, Azure, and developer tools, helping Indian developers stay ahead in technology.",
+            date: "Ongoing",
+            url: "https://devblogs.microsoft.com/",
+            status: "approved"
+        },
+        {
+            id: "default9",
+            title: "Google Developers India",
+            author: "Google India Team",
+            image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1470&q=80",
+            content: "Google Developers India features professional articles, event updates, and tutorials on Android, web, cloud, and AI technologies, empowering Indian developers to build innovative solutions.",
+            date: "Ongoing",
+            url: "https://developers.google.com/community/india",
+            status: "approved"
+        },
+        {
+            id: "default10",
+            title: "Codeforces India",
+            author: "Codeforces Community",
+            image: "https://images.unsplash.com/photo-1519985176271-adb1088fa94c?auto=format&fit=crop&w=1470&q=80",
+            content: "Codeforces India is a hub for competitive programmers, sharing professional contest announcements, problem-solving strategies, and coding tutorials for aspiring and experienced developers.",
+            date: "Ongoing",
+            url: "https://codeforces.com/blog/entry/67338",
             status: "approved"
         }
     ];
@@ -730,3 +780,134 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+// Add these to your existing JavaScript
+
+// Create floating particles for hero section
+function createParticles() {
+    const particlesContainer = document.createElement('div');
+    particlesContainer.className = 'particles';
+    document.querySelector('.hero').appendChild(particlesContainer);
+
+    const particleCount = 30;
+
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+
+        // Random size between 2px and 6px
+        const size = Math.random() * 4 + 2;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+
+        // Random position
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+
+        // Random animation duration between 10s and 20s
+        const duration = Math.random() * 10 + 10;
+        particle.style.animationDuration = `${duration}s`;
+
+        // Random delay
+        particle.style.animationDelay = `${Math.random() * 5}s`;
+
+        particlesContainer.appendChild(particle);
+    }
+}
+
+// Add ripple effect to buttons
+function addRippleEffect(buttons) {
+    buttons.forEach(button => {
+        button.addEventListener('click', function (e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const ripple = document.createElement('span');
+            ripple.className = 'ripple-effect';
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+
+            this.appendChild(ripple);
+
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+}
+
+// Scroll reveal animation
+function scrollReveal() {
+    const reveals = document.querySelectorAll('.reveal');
+
+    reveals.forEach(reveal => {
+        const revealTop = reveal.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+
+        if (revealTop < windowHeight - 100) {
+            reveal.classList.add('active');
+        }
+    });
+}
+
+// Initialize animations when DOM is loaded
+document.addEventListener('DOMContentLoaded', function () {
+    // Create particles
+    createParticles();
+
+    // Add ripple effect to all buttons with class 'ripple'
+    const buttons = document.querySelectorAll('.cta-button, .auth-button, .submit-btn, .write-blog-btn, .auth-btn');
+    addRippleEffect(buttons);
+
+    // Add scroll reveal to sections
+    const sections = document.querySelectorAll('section');
+    sections.forEach(section => {
+        section.classList.add('reveal');
+    });
+
+    // Add scroll event listener for reveal animation
+    window.addEventListener('scroll', scrollReveal);
+    scrollReveal(); // Run once on load
+
+    // Add animated gradient text to hero heading
+    const heroHeading = document.querySelector('.hero h1');
+    heroHeading.classList.add('animated-gradient-text');
+
+    // Add pulse animation to CTA buttons
+    const ctaButtons = document.querySelectorAll('.cta-button, .auth-button');
+    ctaButtons.forEach(button => {
+        button.classList.add('pulse');
+    });
+});
+
+// Add loading animation to blog cards
+function createLoadingCards(count, container) {
+    container.innerHTML = '';
+    for (let i = 0; i < count; i++) {
+        const card = document.createElement('div');
+        card.className = 'blog-card loading-card';
+        container.appendChild(card);
+    }
+}
+
+// In your loadBlogs function, add loading animation at the start
+function loadBlogs() {
+    createLoadingCards(5, postsGrid); // Show 5 loading cards
+
+    // Then proceed with your existing loading logic
+    // ...
+}
+
+// Add this to your existing animateOnScroll function
+function animateOnScroll() {
+    const elements = document.querySelectorAll('.reveal:not(.active)');
+    elements.forEach(element => {
+        const elementPosition = element.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+        if (elementPosition < windowHeight - 100) {
+            element.classList.add('active');
+        }
+    });
+}
+
