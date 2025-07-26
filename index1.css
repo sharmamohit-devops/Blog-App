@@ -1,0 +1,62 @@
+/* Admin Panel Styles */
+.admin-section {
+    margin-bottom: 2rem;
+    background-color: var(--input-bg);
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.notifications-container {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+}
+
+.notification {
+    background-color: var(--card-bg);
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-radius: 0.5rem;
+    border-left: 3px solid var(--primary);
+}
+
+.notification p {
+    margin-bottom: 0.5rem;
+    color: var(--text);
+}
+
+.notification small {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.notification button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.25rem;
+    margin-right: 0.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.notification button:hover {
+    opacity: 0.9;
+}
+
+.notification button.mark-read-btn {
+    background: var(--text-secondary);
+}
+
+.notification button.view-blog-btn {
+    background: var(--secondary);
+}
+
+/* Make the admin panel look distinct */
+#admin .blog-form-container {
+    background: linear-gradient(135deg, rgba(20, 20, 40, 0.9), rgba(40, 40, 60, 0.9));
+    border: 1px solid var(--primary);
+}
