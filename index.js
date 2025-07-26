@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let isAdmin = false;
 
     // Admin emails (in a real app, this would be stored in Firebase)
-    const adminEmails = ['admin@nebula.com'];
+    const adminEmails = ['mohitfrontendev@gmail.com'];
 
     function showToast(message, type = 'success') {
         toastMessage.textContent = message;
