@@ -1,4 +1,3 @@
-// Firebase configuration - Replace with your actual config
 const firebaseConfig = {
     apiKey: "AIzaSyCX9UYMLfhVgABq9Jr_7mfmxPGJ8IDUs4A",
     authDomain: "blog-app-3d4b6.firebaseapp.com",
@@ -46,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeApprovalModal = document.getElementById('closeApprovalModal');
     const approveBlogBtn = document.getElementById('approveBlog');
     const rejectBlogBtn = document.getElementById('rejectBlog');
+    const adminNotifications = document.getElementById('adminNotifications');
 
     let isLoggedIn = false;
     let currentUser = null;
@@ -87,8 +87,12 @@ document.addEventListener('DOMContentLoaded', function () {
             // Show admin link if user is admin
             if (isAdmin) {
                 adminLink.style.display = 'block';
+                adminSection.style.display = 'block';
+                loadPendingBlogs();
+                loadNotifications();
             } else {
                 adminLink.style.display = 'none';
+                adminSection.style.display = 'none';
             }
 
             writeBlogBtn.style.display = 'block';
@@ -214,6 +218,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (isAdmin) {
                 loadPendingBlogs();
+                loadNotifications();
             }
         } else {
             // User is signed out
@@ -446,6 +451,112 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
+    // Load notifications for admin
+    function loadNotifications() {
+        adminNotifications.innerHTML = '';
+
+        db.collection('notifications')
+            .orderBy('createdAt', 'desc')
+            .limit(10)
+            .get()
+            .then((querySnapshot) => {
+                if (querySnapshot.empty) {
+                    adminNotifications.innerHTML = '<p style="color: var(--text-secondary); text-align: center;">No notifications</p>';
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const notification = doc.data();
+                    notification.id = doc.id;
+                    createNotificationElement(notification);
+                });
+            })
+            .catch((error) => {
+                console.error("Error getting notifications: ", error);
+                showToast('Error loading notifications', 'error');
+            });
+    }
+
+    function createNotificationElement(notification) {
+        const notificationEl = document.createElement('div');
+        notificationEl.className = 'notification';
+
+        const timeAgo = formatTimeAgo(notification.createdAt.toDate());
+
+        notificationEl.innerHTML = `
+                <p>${notification.message}</p>
+                <small>${timeAgo}</small>
+                <button class="mark-read-btn" data-id="${notification.id}">Mark as Read</button>
+                ${notification.blogId ? `<button class="view-blog-btn" data-blog-id="${notification.blogId}">View Blog</button>` : ''}
+            `;
+
+        adminNotifications.appendChild(notificationEl);
+
+        // Add event listeners
+        notificationEl.querySelector('.mark-read-btn').addEventListener('click', function () {
+            markNotificationAsRead(notification.id);
+        });
+
+        if (notification.blogId) {
+            notificationEl.querySelector('.view-blog-btn').addEventListener('click', function () {
+                viewBlogFromNotification(notification.blogId);
+            });
+        }
+    }
+
+    function formatTimeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
+        let interval = Math.floor(seconds / 31536000);
+
+        if (interval >= 1) {
+            return interval + " year" + (interval === 1 ? "" : "s") + " ago";
+        }
+        interval = Math.floor(seconds / 2592000);
+        if (interval >= 1) {
+            return interval + " month" + (interval === 1 ? "" : "s") + " ago";
+        }
+        interval = Math.floor(seconds / 86400);
+        if (interval >= 1) {
+            return interval + " day" + (interval === 1 ? "" : "s") + " ago";
+        }
+        interval = Math.floor(seconds / 3600);
+        if (interval >= 1) {
+            return interval + " hour" + (interval === 1 ? "" : "s") + " ago";
+        }
+        interval = Math.floor(seconds / 60);
+        if (interval >= 1) {
+            return interval + " minute" + (interval === 1 ? "" : "s") + " ago";
+        }
+        return Math.floor(seconds) + " second" + (seconds === 1 ? "" : "s") + " ago";
+    }
+
+    function markNotificationAsRead(notificationId) {
+        db.collection('notifications').doc(notificationId).delete()
+            .then(() => {
+                loadNotifications();
+                showToast('Notification marked as read');
+            })
+            .catch((error) => {
+                showToast('Error marking notification as read', 'error');
+            });
+    }
+
+    function viewBlogFromNotification(blogId) {
+        db.collection('blogs').doc(blogId).get()
+            .then((doc) => {
+                if (doc.exists) {
+                    const blog = doc.data();
+                    blog.id = doc.id;
+                    openModal(blog);
+                } else {
+                    showToast('Blog not found', 'error');
+                }
+            })
+            .catch((error) => {
+                showToast('Error loading blog', 'error');
+            });
+    }
+
     // Create a blog card for display
     function createBlogCard(blog, container) {
         const excerpt = blog.content.length > 100 ?
@@ -572,6 +683,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     loadBlogs(); // Refresh the list
                 } else {
                     showToast('Your blog has been submitted for admin approval!', 'warning');
+
+                    // Create a notification for admin
+                    if (!isAdmin) {
+                        const notification = {
+                            message: `New blog pending approval: "${title}" by ${newBlog.author}`,
+                            type: 'blog_submission',
+                            blogId: docRef.id,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            read: false
+                        };
+
+                        db.collection('notifications').add(notification)
+                            .catch(error => {
+                                console.error("Error creating notification: ", error);
+                            });
+                    }
                 }
 
                 document.getElementById('blogs').scrollIntoView({ behavior: 'smooth' });
@@ -642,7 +769,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (currentBlogId) {
             db.collection('blogs').doc(currentBlogId).update({
                 status: 'approved',
-                approvedAt: firebase.firestore.FieldValue.serverTimestamp()
+                approvedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                approvedBy: currentUser.uid
             })
                 .then(() => {
                     showToast('Blog approved successfully!');
@@ -651,6 +779,26 @@ document.addEventListener('DOMContentLoaded', function () {
                     currentBlogId = null;
                     loadPendingBlogs();
                     loadBlogs();
+
+                    // Create a notification for the blog author
+                    db.collection('blogs').doc(currentBlogId).get()
+                        .then(doc => {
+                            if (doc.exists) {
+                                const blog = doc.data();
+                                const notification = {
+                                    message: `Your blog "${blog.title}" has been approved!`,
+                                    type: 'blog_approved',
+                                    blogId: currentBlogId,
+                                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                                    read: false
+                                };
+
+                                return db.collection('notifications').add(notification);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error creating approval notification: ", error);
+                        });
                 })
                 .catch((error) => {
                     showToast('Error approving blog: ' + error.message, 'error');
@@ -663,7 +811,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (currentBlogId) {
             db.collection('blogs').doc(currentBlogId).update({
                 status: 'rejected',
-                rejectedAt: firebase.firestore.FieldValue.serverTimestamp()
+                rejectedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                rejectedBy: currentUser.uid
             })
                 .then(() => {
                     showToast('Blog rejected successfully!');
@@ -671,6 +820,26 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.body.style.overflow = 'auto';
                     currentBlogId = null;
                     loadPendingBlogs();
+
+                    // Create a notification for the blog author
+                    db.collection('blogs').doc(currentBlogId).get()
+                        .then(doc => {
+                            if (doc.exists) {
+                                const blog = doc.data();
+                                const notification = {
+                                    message: `Your blog "${blog.title}" has been rejected.`,
+                                    type: 'blog_rejected',
+                                    blogId: currentBlogId,
+                                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                                    read: false
+                                };
+
+                                return db.collection('notifications').add(notification);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error creating rejection notification: ", error);
+                        });
                 })
                 .catch((error) => {
                     showToast('Error rejecting blog: ' + error.message, 'error');
@@ -697,6 +866,7 @@ document.addEventListener('DOMContentLoaded', function () {
             adminSection.style.display = 'block';
             adminSection.scrollIntoView({ behavior: 'smooth' });
             loadPendingBlogs();
+            loadNotifications();
         } else {
             adminSection.style.display = 'none';
         }
@@ -739,6 +909,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 adminSection.style.display = 'block';
                 adminSection.scrollIntoView({ behavior: 'smooth' });
                 loadPendingBlogs();
+                loadNotifications();
             }
         });
     });
@@ -778,6 +949,63 @@ document.addEventListener('DOMContentLoaded', function () {
                 el.style.transform = 'translateY(0)';
             }, index * 200);
         });
+    });
+
+    // Privacy, Terms, and Contact modals
+    const privacyModal = document.getElementById('privacyModal');
+    const termsModal = document.getElementById('termsModal');
+    const contactModal = document.getElementById('contactModal');
+    const closePrivacyModal = document.getElementById('closePrivacyModal');
+    const closeTermsModal = document.getElementById('closeTermsModal');
+    const closeContactModal = document.getElementById('closeContactModal');
+
+    // Footer link handlers
+    document.querySelector('a[href="#privacy"]').addEventListener('click', function (e) {
+        e.preventDefault();
+        privacyModal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    });
+
+    document.querySelector('a[href="#terms"]').addEventListener('click', function (e) {
+        e.preventDefault();
+        termsModal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    });
+
+    document.querySelector('a[href="#contact"]').addEventListener('click', function (e) {
+        e.preventDefault();
+        contactModal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    });
+
+    closePrivacyModal.addEventListener('click', function () {
+        privacyModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+
+    closeTermsModal.addEventListener('click', function () {
+        termsModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+
+    closeContactModal.addEventListener('click', function () {
+        contactModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+
+    window.addEventListener('click', function (e) {
+        if (e.target === privacyModal) {
+            privacyModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        if (e.target === termsModal) {
+            termsModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        if (e.target === contactModal) {
+            contactModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
     });
 });
 
@@ -910,73 +1138,4 @@ function animateOnScroll() {
         }
     });
 }
-    // Add these to your existing JavaScript code
-
-    // Privacy Policy Modal
-    const privacyModal = document.getElementById('privacyModal');
-    const closePrivacyModal = document.getElementById('closePrivacyModal');
-    const privacyLink = document.querySelector('a[href="#privacy"]');
-
-    // Terms of Service Modal
-    const termsModal = document.getElementById('termsModal');
-    const closeTermsModal = document.getElementById('closeTermsModal');
-    const termsLink = document.querySelector('a[href="#terms"]');
-
-    // Contact Modal
-    const contactModal = document.getElementById('contactModal');
-    const closeContactModal = document.getElementById('closeContactModal');
-    const contactLink = document.querySelector('a[href="#contact"]');
-
-    // Privacy Policy click handler
-    privacyLink.addEventListener('click', function (e) {
-        e.preventDefault();
-        privacyModal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    });
-
-    // Terms of Service click handler
-    termsLink.addEventListener('click', function (e) {
-        e.preventDefault();
-        termsModal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    });
-
-    // Contact click handler
-    contactLink.addEventListener('click', function (e) {
-        e.preventDefault();
-        contactModal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    });
-
-    // Close modals
-    closePrivacyModal.addEventListener('click', function () {
-        privacyModal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    });
-
-    closeTermsModal.addEventListener('click', function () {
-        termsModal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    });
-
-    closeContactModal.addEventListener('click', function () {
-        contactModal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    });
-
-    // Close when clicking outside modal content
-    window.addEventListener('click', function (e) {
-        if (e.target === privacyModal) {
-            privacyModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-        if (e.target === termsModal) {
-            termsModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-        if (e.target === contactModal) {
-            contactModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-    });
 
